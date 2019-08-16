@@ -1315,6 +1315,7 @@
           ],
           "summary": "/fleet/hos_logs_summary",
           "operationId": "getFleetHosLogsSummary",
+          "deprecated": true,
           "parameters": [],
           "responses": {
             "200": {
