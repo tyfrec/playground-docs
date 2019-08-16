@@ -1131,7 +1131,7 @@
         "post": {
           "description": "Get summarized daily HOS charts for a specified driver.",
           "tags": [
-            "Compliance"
+            "V1 - Compliance"
           ],
           "summary": "/fleet/drivers/{driver_id}/hos_daily_logs",
           "operationId": "getFleetDriversHosDailyLogs",
@@ -1197,7 +1197,7 @@
         "get": {
           "description": "Get the HOS (hours of service) signin and signout logs for the specified driver. The response includes 4 fields that are now deprecated.",
           "tags": [
-            "Compliance"
+            "V1 - Compliance"
           ],
           "summary": "/fleet/hos_authentication_logs",
           "operationId": "getFleetHosAuthenticationLogs",
@@ -1247,7 +1247,7 @@
         "post": {
           "description": "Get the HOS (hours of service) logs for the specified driver. This method returns all the HOS statuses that the driver was in during this time period.",
           "tags": [
-            "Compliance"
+            "V1 - Compliance"
           ],
           "summary": "/fleet/hos_logs",
           "operationId": "getFleetHosLogs",
@@ -1311,7 +1311,7 @@
         "get": {
           "description": "Get the current HOS status for all drivers in the group. Note that this includes inactive as well as active drivers.",
           "tags": [
-            "Compliance"
+            "V1 - Compliance"
           ],
           "summary": "/fleet/hos_logs_summary",
           "operationId": "getFleetHosLogsSummary",
@@ -6410,7 +6410,7 @@
       },
       {
         "description": "Endpoints to help you manage US and Canada Hours of Service",
-        "name": "Compliance"
+        "name": "V1 - Compliance"
       },
       {
         "description": "Access to industrial data",
