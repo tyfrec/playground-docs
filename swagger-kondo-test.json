@@ -4,7 +4,7 @@
   "schemes": ["https"],
   "swagger": "2.0",
   "info": {
-    "description": "<aside class=\"notice\">\nYou must replace <code>meowmeowmeow</code> with your personal API key.\n</aside>",
+    "description": "Description goes here.",
     "title": "Samsara API"
   },
   "host": "api.samsara.com",
