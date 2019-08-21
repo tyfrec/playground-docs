@@ -11,7 +11,7 @@
   "paths": {
     "/addresses": {
       "get": {
-        "description": "Returns a list of all addresses in an organization",
+        "description": "# Header\nReturns a list of all addresses in an organization",
         "tags": ["Addresses"],
         "summary": "List all addresses",
         "operationId": "getAddresses",
