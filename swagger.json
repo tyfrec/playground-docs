@@ -10,7 +10,7 @@
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Description goes here.",
+    "description": "<aside class=\"notice\">\nYou must replace <code>meowmeowmeow</code> with your personal API key.\n</aside>",
     "title": "Samsara API",
     "version": "1.0.0"
   },
