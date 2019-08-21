@@ -4,14 +4,14 @@
   "schemes": ["https"],
   "swagger": "2.0",
   "info": {
-    "description": "Description goes here.",
+    "description": "<aside class=\"notice\">\nYou must replace <code>meowmeowmeow</code> with your personal API key.\n</aside>",
     "title": "Samsara API"
   },
   "host": "api.samsara.com",
   "paths": {
     "/addresses": {
       "get": {
-        "description": "# Header\nReturns a list of all addresses in an organization",
+        "description": "Returns a list of all addresses in an organization",
         "tags": ["Addresses"],
         "summary": "List all addresses",
         "operationId": "getAddresses",
