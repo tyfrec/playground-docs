@@ -16,6 +16,8 @@ If you would like to access the existing API docs, you can still do so at this l
 
 # Overview
 
+Check out our guides and FAQs [here](#)!
+
 Welcome intro goes here.
 
 ## Endpoints
