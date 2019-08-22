@@ -467,7 +467,7 @@
         "tags": [
           "Documents"
         ],
-        "summary": "/fleet/drivers/{driver_id}/documents",
+        "summary": "Create a driver document for the given driver.",
         "operationId": "createDriverDocument",
         "parameters": [
           {
@@ -502,7 +502,7 @@
     },
     "/v1/fleet/drivers/{driver_id}/documents/{document_id}": {
       "get": {
-        "description": "Fetches a single document submission by driver.",
+        "description": "Get a specific document for a specific driver.",
         "consumes": [
           "application/json"
         ],
@@ -512,7 +512,7 @@
         "tags": [
           "Documents"
         ],
-        "summary": "/fleet/drivers/{driver_id}/documents/{document_id}",
+        "summary": "Get a specific document for a specific driver.",
         "operationId": "getDriverDocumentByIdAndDriverId",
         "responses": {
           "200": {
@@ -2923,6 +2923,10 @@
         }
       ]
     },
+    "ErrorResponse": {
+      "description": "Error message describing why the request failed.",
+      "type": "string"
+    },
     "LocationsWrapper": {
       "allOf": [
         {
@@ -3943,6 +3947,40 @@
           }
         }
       }
+    },
+    "documentCreateParam": {
+      "description": "To create a document for a given document type, the document type's uuid needs to be passed in to documentTypeUuid. The list of fields passed in should match the document type’s list of field types in the correct order. In other words, a field's valueType and value (i.e. only one of: stringValue, numberValue, or photoValue) at index _i_ should match with the document field type’s valueType at index _i_.",
+      "name": "createDocumentParams",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/DocumentCreate"
+      }
+    },
+    "documentQueryByParam": {
+      "enum": [
+        "created",
+        "updated"
+      ],
+      "type": "string",
+      "format": "string",
+      "description": "Retrieve most recent documents based on either driverCreatedAtMs or serverUpdatedAtMs. If no value is provided, the default is driverCreatedAtMs.",
+      "name": "queryBy",
+      "in": "query"
+    },
+    "documentsDurationMsParam": {
+      "type": "integer",
+      "format": "int64",
+      "description": "Time in milliseconds that represents the duration before endMs to query. Defaults to 24 hours.",
+      "name": "durationMs",
+      "in": "query"
+    },
+    "documentsEndMsParam": {
+      "type": "integer",
+      "format": "int64",
+      "description": "Time in unix milliseconds that represents the oldest documents to return. Used in combination with durationMs. Defaults to now.",
+      "name": "endMs",
+      "in": "query"
     },
     "endTimeQueryParam": {
       "type": "string",
