@@ -1,5 +1,8 @@
 <n class="info">
-<nh>Something new!</nh>
+<nh>
+<i class="fa fa-info-circle"></i>
+Something new!
+</nh>
 <nb>
 At Samsara, we're committed to delivering the best functionality to help you achieve your business goals. We heard your feedback from our v1 API, and we're excited to provide you with the new official Samsara Open API. You can read more about this new API on our [Samsara Open API Release FAQ page](#).<br>
 <br>
@@ -24,6 +27,10 @@ https://api.samsara.com/<endpoint>
 ```
 
 <n class="warning">
+<nh>
+<i class="fa fa-exclamation-circle"></i>
+Note
+</nh>
 <nb>
 If the endpoint is still on V1, the URL will be: `https://api.samsara.com/v1/<endpoint>`
 </nb>
@@ -46,9 +53,55 @@ Response code info goes here.
 Error response info goes here.
 
 <n class="warning">
+<nh>
+<i class="fa fa-exclamation-circle"></i>
+Note
+</nh>
 <nb>
 V1 may have different response codes.
 </nb>
 </n>
 
+## Versioning
 
+Versioning info goes here.
+
+<n class="warning">
+<nb>
+Warning about V1 versioning.
+</nb>
+</n>
+
+## Common Structures
+
+### Pagination
+
+Pagination info here.
+
+<n class="warning">
+<nh>
+<i class="fa fa-exclamation-circle"></i>
+Note
+</nh>
+<nb>
+Warning about V1 pagination.
+</nb>
+</n>
+
+### Timestamps
+
+Info about timestamps here.
+
+<n class="warning">
+<nh>
+<i class="fa fa-exclamation-circle"></i>
+Note
+</nh>
+<nb>
+Warning about V1 timestamps.
+</nb>
+</n>
+
+## Guides and FAQs
+
+Check out our guides and FAQs [here](#)!
