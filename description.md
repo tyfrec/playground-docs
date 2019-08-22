@@ -7,11 +7,25 @@ If you would like to access the existing API docs, you can still do so at this l
 <br>
 *Note: This is an API preview, and not a final API spec. Samsara is making this available to outside parties to gather feedback, but we do not recommend coding directly against this API just yet. Samsara reserves the right to make breaking changes until the API’s full release.*<br>
 <br>
-*Note: Because this is a still a new set of APIs, we have not transitioned all resources over to this standard quite yet. Resources that still use the V1 standards will be indicated*
+*Note: Because this is a still a new set of APIs, we have not transitioned all resources over to this standard quite yet. Resources that still use the V1 standards will be indicated.*
 </nb>
 </n>
 
 # Overview
 
-Overview goes here.
+Welcome intro goes here.
+
+## Endpoints
+
+All our APIs can be accessed through HTTP requests to URLs like:
+
+```
+https://api.samsara.com/<endpoint>
+```
+
+<n class="warning">
+<nb>
+If the endpoint is still on V1, the URL will be: `https://api.samsara.com/v1/&ltendpoint&gt`
+</nb>
+</n>
 

@@ -8,9 +8,20 @@ n.info {
     background-color: rgba(0, 51, 160, 0.1);
 }
 
+n.warning {
+    background-color: #fdf6e3;
+}
+
+n:before {
+    margin-right: 6px;
+}
+
 n.info:before {
     content: "\24D8";
-    margin-right: 6px;
+}
+
+n.warning:before {
+    content: "\2755";
 }
 
 nh {
