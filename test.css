@@ -10,6 +10,7 @@ n.info {
 
 n.info:before {
     content: "\24D8";
+    margin-right: 6px;
 }
 
 nh {
