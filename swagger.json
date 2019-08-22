@@ -3996,5 +3996,19 @@
       "name": "startTime",
       "in": "query"
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Addresses",
+      "description": "Address description."
+    },
+    {
+      "name": "Contacts",
+      "description": "Contacts description."
+    },
+    {
+      "name": "Documents",
+      "description": "<n class=\"warning\">\n<nh>\n<i class=\"fa fa-exclamation-circle\"></i>\nThis endpoint is still on V1 and may not adhere to \"Kondo\" standards!\n</nh>\n</n>\n\nDocuments description."
+    }
+  ]
 }
