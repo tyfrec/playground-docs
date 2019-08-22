@@ -384,6 +384,169 @@
         }
       ]
     },
+    "/v1/fleet/drivers/document_types": {
+      "get": {
+        "description": "Get all document types.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Get all document types.",
+        "operationId": "getDriverDocumentTypesByOrgId",
+        "responses": {
+          "200": {
+            "description": "Returns all of the document types.",
+            "schema": {
+              "$ref": "#/definitions/DocumentTypes"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/fleet/drivers/documents": {
+      "get": {
+        "description": "Get all documents.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Get all documents.",
+        "operationId": "getDriverDocumentsByOrgId",
+        "parameters": [
+          {
+            "$ref": "#/parameters/documentsEndMsParam"
+          },
+          {
+            "$ref": "#/parameters/documentsDurationMsParam"
+          },
+          {
+            "$ref": "#/parameters/documentQueryByParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all of the documents.",
+            "schema": {
+              "$ref": "#/definitions/Documents"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/fleet/drivers/{driver_id}/documents": {
+      "post": {
+        "description": "Create a driver document for the given driver.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Documents"
+        ],
+        "summary": "/fleet/drivers/{driver_id}/documents",
+        "operationId": "createDriverDocument",
+        "parameters": [
+          {
+            "$ref": "#/parameters/documentCreateParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the created document.",
+            "schema": {
+              "$ref": "#/definitions/Document"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "description": "ID of the driver for whom the document is created. Must contain only digits 0-9.",
+          "name": "driver_id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/v1/fleet/drivers/{driver_id}/documents/{document_id}": {
+      "get": {
+        "description": "Fetches a single document submission by driver.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Documents"
+        ],
+        "summary": "/fleet/drivers/{driver_id}/documents/{document_id}",
+        "operationId": "getDriverDocumentByIdAndDriverId",
+        "responses": {
+          "200": {
+            "description": "Returns the specified document.",
+            "schema": {
+              "$ref": "#/definitions/Document"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "description": "ID of the driver who submitted the document. Must contain only digits 0-9.",
+          "name": "driver_id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "ID of document.",
+          "name": "document_id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
     "/fleet/drivers": {
       "get": {
         "description": "Get all drivers in organization.",
@@ -1884,6 +2047,384 @@
           "maxLength": 255,
           "example": "111-222-3344"
         }
+      }
+    },
+    "Document": {
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "id",
+            "orgId",
+            "driverId",
+            "driverCreatedAtMs",
+            "serverCreatedAtMs",
+            "serverUpdatedAtMs",
+            "documentType",
+            "fields"
+          ],
+          "properties": {
+            "documentType": {
+              "description": "Descriptive name of this type of document.",
+              "type": "string",
+              "example": "Fuel Receipt"
+            },
+            "driverCreatedAtMs": {
+              "description": "The time in Unix epoch milliseconds that the document is created on the driver app.",
+              "type": "integer",
+              "format": "int64",
+              "example": 1462881998034
+            },
+            "driverId": {
+              "description": "ID of the driver for whom the document is submitted",
+              "type": "integer",
+              "format": "int64",
+              "example": 555
+            },
+            "fields": {
+              "description": "The fields associated with this document.",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DocumentField"
+              },
+              "example": [
+                {
+                  "label": "Photos",
+                  "photoValue": [],
+                  "valueType": "ValueType_Photo"
+                },
+                {
+                  "label": "Gallons",
+                  "numberValue": 12.34,
+                  "valueType": "ValueType_Number"
+                },
+                {
+                  "label": "City",
+                  "stringValue": "San Francisco, CA",
+                  "valueType": "ValueType_String"
+                },
+                {
+                  "label": "Fuel Type",
+                  "multipleChoiceValue": [
+                    {
+                      "selected": true,
+                      "value": "Diesel"
+                    },
+                    {
+                      "selected": false,
+                      "value": "Gas"
+                    }
+                  ],
+                  "valueType": "ValueType_MultipleChoice"
+                }
+              ]
+            },
+            "id": {
+              "description": "ID of the document",
+              "type": "string",
+              "example": "2018_42424242"
+            },
+            "orgId": {
+              "description": "Organization ID that the document \u0026 driver who submitted the doc belongs to",
+              "type": "integer",
+              "format": "int64",
+              "example": 555
+            },
+            "serverCreatedAtMs": {
+              "description": "The time in Unix epoch milliseconds that the document is created on the server.",
+              "type": "integer",
+              "format": "int64",
+              "example": 1462881998034
+            },
+            "serverUpdatedAtMs": {
+              "description": "The time in Unix epoch milliseconds that the document is updated on the server.",
+              "type": "integer",
+              "format": "int64",
+              "example": 1462881998034
+            },
+            "vehicleId": {
+              "description": "VehicleID of the driver at document creation.",
+              "type": "integer",
+              "format": "int64",
+              "example": 222
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/DocumentBase"
+        }
+      ]
+    },
+    "DocumentBase": {
+      "type": "object",
+      "required": [
+        "dispatchJobId",
+        "notes"
+      ],
+      "properties": {
+        "dispatchJobId": {
+          "description": "ID of the Samsara dispatch job for which the document is submitted",
+          "type": "integer",
+          "format": "int64",
+          "example": 773
+        },
+        "notes": {
+          "description": "Notes submitted with this document.",
+          "type": "string",
+          "example": "Fueled up before delivery."
+        },
+        "state": {
+          "description": "The condition of the document created for the driver. Can be either `Required` or `Submitted`, if no value is specified, `state` defaults to `Required`. `Required` documents are pre-populated documents for the Driver to fill out in the Driver App.",
+          "type": "string",
+          "default": "Required",
+          "enum": [
+            "Required",
+            "Submitted"
+          ],
+          "example": "Submitted"
+        }
+      }
+    },
+    "DocumentCreate": {
+      "allOf": [
+        {
+          "description": "Arguments to create a document.",
+          "type": "object",
+          "required": [
+            "documentTypeUuid",
+            "fields"
+          ],
+          "properties": {
+            "documentTypeUuid": {
+              "description": "Universally unique identifier for the document type this document is being created for.",
+              "type": "string",
+              "example": "4aff772c-a7bb-45e6-8e41-6a53e34feb83"
+            },
+            "fields": {
+              "description": "List of fields and associated values for a given document. The fields must be listed in the order that that they appear in the specificied document type. Today `stringValue`, `numberValue`, and `multipleChoiceValue` are the supported document upload field types.",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DocumentField"
+              },
+              "example": [
+                {
+                  "label": "Gallons",
+                  "numberValue": 12.34,
+                  "valueType": "ValueType_Number"
+                },
+                {
+                  "label": "City",
+                  "stringValue": "San Francisco, CA",
+                  "valueType": "ValueType_String"
+                },
+                {
+                  "label": "Fuel Type",
+                  "multipleChoiceValue": [
+                    {
+                      "selected": true,
+                      "value": "Diesel"
+                    },
+                    {
+                      "selected": false,
+                      "value": "Gas"
+                    }
+                  ],
+                  "valueType": "ValueType_MultipleChoice"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/DocumentCreateBase"
+        }
+      ]
+    },
+    "DocumentCreateBase": {
+      "type": "object",
+      "properties": {
+        "dispatchJobId": {
+          "description": "ID of the Samsara dispatch job for which the document is submitted",
+          "type": "integer",
+          "format": "int64",
+          "example": 773
+        },
+        "notes": {
+          "description": "Notes submitted with this document.",
+          "type": "string",
+          "example": "Fueled up before delivery."
+        },
+        "state": {
+          "description": "The condition of the document created for the driver. Can be either `Required` or `Submitted`, if no value is specified, `state` defaults to `Required`. `Required` documents are pre-populated documents for the Driver to fill out in the Driver App.",
+          "type": "string",
+          "default": "Required",
+          "enum": [
+            "Required",
+            "Submitted"
+          ],
+          "example": "Submitted"
+        }
+      }
+    },
+    "DocumentField": {
+      "allOf": [
+        {
+          "description": "A field of a document. A field can be a string type, number type, or photo type, which can be identified from its valueType. Between stringValue, numberValue, and photoValue, only one can exist for a single document field depending on the valueType.",
+          "type": "object",
+          "required": [
+            "label"
+          ],
+          "properties": {
+            "label": {
+              "description": "Descriptive name of this field.",
+              "type": "string",
+              "example": "Fuel Cost ($)"
+            },
+            "value": {
+              "description": "DEPRECATED: Please use stringValue, numberValue, or photoValue instead. Value of this field. Depending on what kind of field it is, this may be one of the following: an array of image urls, a float, an integer, or a string.",
+              "example": 23.45
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/DocumentFieldCreate"
+        }
+      ]
+    },
+    "DocumentFieldCreate": {
+      "type": "object",
+      "required": [
+        "valueType"
+      ],
+      "properties": {
+        "multipleChoiceValue": {
+          "description": "Value of this field if this document field has valueType: ValueType_MultipleChoice. Array of objects containing two fields: the string value of the multiple choice option and a boolean representing whether or not the choice was selected",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "selected": {
+                "type": "boolean"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "numberValue": {
+          "description": "Value of this field if this document field has valueType: ValueType_Number.",
+          "type": "number",
+          "format": "double",
+          "example": 12.34
+        },
+        "photoValue": {
+          "description": "Value of this field if this document field has valueType: ValueType_Photo. Array of photo objects where each object contains a URL for a photo.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "description": "Photo URL for a JPG image",
+                "type": "string"
+              }
+            }
+          },
+          "example": [
+            {
+              "url": "https://www.samsara.com/photo1"
+            },
+            {
+              "url": "https://www.samsara.com/photo2"
+            }
+          ]
+        },
+        "stringValue": {
+          "description": "Value of this field if this document field has valueType: ValueType_String.",
+          "type": "string",
+          "example": "This is a string."
+        },
+        "valueType": {
+          "description": "Determines the type of this field and what type of value this field has. It should be either ValueType_Number, ValueType_String, ValueType_Photo, or ValueType_MultipleChoice.",
+          "type": "string",
+          "example": "ValueType_Number"
+        }
+      }
+    },
+    "DocumentFieldType": {
+      "type": "object",
+      "required": [
+        "label",
+        "valueType"
+      ],
+      "properties": {
+        "label": {
+          "description": "Descriptive name of this field type.",
+          "type": "string",
+          "example": "Fuel Cost ($)"
+        },
+        "numberValueTypeMetadata": {
+          "description": "Additional metadata information for a number field type. Only defined when a field type has valueType: ValueType_Number.",
+          "type": "object",
+          "properties": {
+            "numDecimalPlaces": {
+              "description": "Number of decimal places that values for this field type can have.",
+              "type": "number",
+              "format": "int64",
+              "example": 2
+            }
+          }
+        },
+        "valueType": {
+          "description": "The kind of value that can be submitted for this fieldType. It should be either ValueType_Number, ValueType_String, or ValueType_Photo.",
+          "type": "string",
+          "example": "ValueType_Number"
+        }
+      }
+    },
+    "DocumentType": {
+      "type": "object",
+      "required": [
+        "name",
+        "orgId",
+        "uuid"
+      ],
+      "properties": {
+        "fieldTypes": {
+          "description": "The field types determine the names of fields for this document type. They also determine the types of values a document submitted for this document type can have.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DocumentFieldType"
+          }
+        },
+        "name": {
+          "description": "Name of the document type.",
+          "type": "string",
+          "example": "Fuel Receipt"
+        },
+        "orgId": {
+          "description": "ID for the organization this document belongs to.",
+          "type": "integer",
+          "format": "int64",
+          "example": 773
+        },
+        "uuid": {
+          "description": "Universally unique identifier for the document type. Can be passed in as a documentTypeUuid when creating a document for this document type.",
+          "type": "string",
+          "example": "4aff772c-a7bb-45e6-8e41-6a53e34feb83"
+        }
+      }
+    },
+    "DocumentTypes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/DocumentType"
+      }
+    },
+    "Documents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Document"
       }
     },
     "Driver": {
