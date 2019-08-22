@@ -4008,7 +4008,7 @@
     },
     {
       "name": "Documents",
-      "description": "<n class=\"warning\">\n<nh>\n<i class=\"fa fa-exclamation-circle\"></i>\nThis endpoint is still on V1 and may not adhere to \"Kondo\" standards!\n</nh>\n</n>\n\nDocuments description."
+      "description": "<n class=\"warning\">\n<nh>\n<i class=\"fa fa-exclamation-circle\"></i>\nThese endpoints are still on V1 and may not adhere to \"Kondo\" standards!\n</nh>\n</n>\n\nDocuments description."
     }
   ]
 }
