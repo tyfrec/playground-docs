@@ -1,35 +1,13 @@
-aside {
-    padding-top: 1em;
-    padding-bottom: 1em;
-    margin-top: 1.5em;
-    margin-bottom: 1.5em;
-    background: #8fbcd4;
-    line-height: 1.6;
-}
-
-aside {
-    margin-right: 50%;
-    padding: 0 28px;
-    box-sizing: border-box;
+note {
+    padding: 1em;
+    width: 100%;
     display: block;
 }
 
-aside.notice:before {
-    content: "\e602";
+note.info {
+    background-color: rgba(0, 51, 160, 0.1);
 }
 
-aside.notice:before {
-    font-family: 'slate';
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-}
-
-aside:before {
-    vertical-align: middle;
-    padding-right: 0.5em;
-    font-size: 14px;
+note.info:before {
+    content: "\24D8";
 }
