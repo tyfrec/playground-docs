@@ -1,20 +1,25 @@
-note {
+n {
     padding: 1em;
     width: 100%;
     display: block;
 }
 
-note.info {
+n.info {
     background-color: rgba(0, 51, 160, 0.1);
 }
 
-note.info:before {
+n.info:before {
     content: "\24D8";
 }
 
-h {
-    display: block;
+nh {
     font-size: 1rem;
     font-weight: 700;
     line-height: 1.1;
+}
+
+nb {
+    margin-top: 10px;
+    padding-left: 22px;
+    display: block;
 }

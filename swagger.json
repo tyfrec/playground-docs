@@ -10,7 +10,7 @@
   ],
   "swagger": "2.0",
   "info": {
-    "description": "# Overview\n\n<n class=\"info\">\n<nh>Something new!</nh>\n<nb>\n\nAt Samsara, we're committed to delivering the best functionality to help you achieve your business goals. We heard your feedback from our v1 API, and we're excited to provide you with the new official Samsara Open API. You can read more about this new API on our [Samsara Open API Release FAQ page](#).\n\nIf you would like to access the existing API docs, you can still do so at this link: [Samara V1 API](https://www.samsara.com/api).\n\n*Note: This is an API preview, and not a final API spec. Samsara is making this available to outside parties to gather feedback, but we do not recommend coding directly against this API just yet. Samsara reserves the right to make breaking changes until the API’s full release.*\n\n</nb>\n</n>",
+    "description": "# Overview\n\n<n class=\"info\">\n<nh>Something new!</nh>\n<nb>\nAt Samsara, we're committed to delivering the best functionality to help you achieve your business goals. We heard your feedback from our v1 API, and we're excited to provide you with the new official Samsara Open API. You can read more about this new API on our [Samsara Open API Release FAQ page](#).<br>\nIf you would like to access the existing API docs, you can still do so at this link: [Samara V1 API](https://www.samsara.com/api).<br>\n*Note: This is an API preview, and not a final API spec. Samsara is making this available to outside parties to gather feedback, but we do not recommend coding directly against this API just yet. Samsara reserves the right to make breaking changes until the API’s full release.*\n</nb>\n</n>",
     "title": "Samsara API",
     "version": "1.0.0"
   },
