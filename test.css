@@ -12,17 +12,9 @@ n.warning {
     background-color: #fdf6e3;
 }
 
-/* n:before {
+i:before {
     margin-right: 6px;
 }
-
-n.info:before {
-    content: "\24D8";
-}
-
-n.warning:before {
-    content: "\2755";
-} */
 
 nh {
     font-size: 1rem;

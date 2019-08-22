@@ -67,6 +67,10 @@ V1 may have different response codes.
 Versioning info goes here.
 
 <n class="warning">
+<nh>
+<i class="fa fa-exclamation-circle"></i>
+Note
+</nh>
 <nb>
 Warning about V1 versioning.
 </nb>
