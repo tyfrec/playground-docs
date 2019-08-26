@@ -4,26 +4,21 @@ n {
     width: 100%;
     display: block;
 }
-
 n.info {
     background-color: rgba(0, 51, 160, 0.1);
 }
-
 n.warning {
     background-color: #fdf6e3;
 }
-
 i:before {
     margin-right: 6px;
 }
-
 nh {
     font-size: 1rem;
     font-weight: 700;
     line-height: 1.1;
     display: block;
 }
-
 nb {
     margin-top: 10px;
     padding-left: 22px;
