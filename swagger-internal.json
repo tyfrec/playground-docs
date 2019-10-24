@@ -1,0 +1,906 @@
+{
+  "paths": {
+    "/v1/fleet/vehicles/stats-expanded": {
+      "get": {
+        "tags": ["Fleet"],
+        "summary": "/fleet/vehicles/stats-expanded",
+        "description":
+          "Fetch engine state and aux input data for all vehicles between a start/end time. Data returned may be affected by device connectivity and processing time.",
+        "operationId": "getVehicleStatsPike",
+        "parameters": [
+          {
+            "name": "startMs",
+            "description": "Time in Unix epoch milliseconds for the start of the query.",
+            "required": true,
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "endMs",
+            "description": "Time in Unix epoch milliseconds for the end of the query.",
+            "required": true,
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "series",
+            "description":
+              "Comma-separated list of stat types. Options are engineState, auxInput1, and auxInput2. If this parameter is excluded, all 3 stat types will be returned. Example: series=engineState,auxInput2",
+            "type": "string",
+            "in": "query",
+            "enum": ["engineState", "auxInput1", "auxInput2"]
+          },
+          {
+            "name": "tagIds",
+            "description": "Comma-separated list of tag ids. Example: tagIds=1,2,3",
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "$ref": "#/parameters/paginationStartingAfterParam"
+          },
+          {
+            "$ref": "#/parameters/paginationEndingBeforeParam"
+          },
+          {
+            "$ref": "#/parameters/paginationLimitParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns engine state and/or aux input data for all vehicles between a start/end time.",
+            "schema": {
+              "type": "object",
+              "required": ["vehicleStats"],
+              "properties": {
+                "vehicleStats": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "x-go-name": "VehicleStatsItemPike",
+                    "required": ["id", "name"],
+                    "properties": {
+                      "externalIds": {
+                        "$ref": "#/definitions/ExternalIDs"
+                      },
+                      "id": {
+                        "type": "integer",
+                        "description": "ID of the vehicle.",
+                        "format": "int64",
+                        "example": 112
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the vehicle.",
+                        "format": "string",
+                        "example": "Truck 12"
+                      },
+                      "engineState": {
+                        "type": "array",
+                        "x-omitempty": true,
+                        "items": {
+                          "$ref": "#/definitions/EngineStatePike"
+                        }
+                      },
+                      "auxInput1": {
+                        "$ref": "#/definitions/AuxInputSeriesPike"
+                      },
+                      "auxInput2": {
+                        "$ref": "#/definitions/AuxInputSeriesPike"
+                      }
+                    }
+                  }
+                },
+                "pagination": {
+                  "$ref": "#/definitions/Pagination"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/fleet/unassigned_driving_segments/{segment_id}": {
+      "get": {
+        "tags": ["Fleet"],
+        "summary": "/fleet/unassigned_driving_segments/{segment_id:[a-zA-Z0-9]+}",
+        "description": "Fetch an unassigned driving segment by segment ID.",
+        "operationId": "getUnassignedDrivingSegmentBySegmentId",
+        "parameters": [
+          {
+            "name": "segment_id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the unassigned driving segment.",
+            "type": "string",
+            "format": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unassigned driving segment log for the segment ID.",
+            "schema": {
+              "$ref": "#/definitions/UnassignedDrivingSegment"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Fleet"],
+        "summary": "/fleet/unassigned_driving_segments/{segment_id:[a-zA-Z0-9]+}",
+        "description": "Update an unassigned driving segment.",
+        "operationId": "patchUnassignedDrivingSegment",
+        "parameters": [
+          {
+            "name": "segment_id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the unassigned driving segment.",
+            "type": "string",
+            "format": "string"
+          },
+          {
+            "name": "unassignedDrivingSegmentParams",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "annotation": {
+                  "type": "string",
+                  "description": "Annotation to give this segment.",
+                  "example": "Drive time"
+                },
+                "driverId": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "Driver ID to assign to this segment.",
+                  "example": 719
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The unassigned driving segment that was updated.",
+            "schema": {
+              "$ref": "#/definitions/UnassignedDrivingSegment"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/fleet/unassigned_driving_segments": {
+      "get": {
+        "tags": ["Fleet"],
+        "summary": "/fleet/unassigned_driving_segments",
+        "description": "Get the unassigned driving segments for a specified range.",
+        "operationId": "getUnassignedDrivingSegments",
+        "parameters": [
+          {
+            "name": "startMs",
+            "in": "query",
+            "required": true,
+            "description": "Beginning of the filter time range, specified in milliseconds UNIX time.",
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "endMs",
+            "in": "query",
+            "required": true,
+            "description": "End of the filter time range, specified in milliseconds UNIX time.",
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "filterType",
+            "in": "query",
+            "required": true,
+            "description":
+              "Determines the property that the startMs/endMs time range filter applies to. Currently only 'createdAtMs' is supported",
+            "type": "string",
+            "enum": ["createdAtMs"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unassigned driving segments for provided time range.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "unassignedDrivingSegments": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/UnassignedDrivingSegmentListResponse"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/fleet/drivers/create": {
+      "post": {
+        "tags": ["Fleet", "Drivers"],
+        "summary": "/fleet/drivers/create",
+        "description": "Create a new driver.",
+        "operationId": "createDriver",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "$ref": "#/parameters/createDriverParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the successfully created the driver.",
+            "schema": {
+              "$ref": "#/definitions/Driver"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/fleet/drivers/{driver_id_or_external_id}": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/driverIdOrExternalIdParam"
+        }
+      ],
+      "get": {
+        "tags": ["Fleet", "Drivers"],
+        "summary": "/fleet/drivers/{driver_id or external_id}",
+        "description": "Fetch driver by id.",
+        "operationId": "getDriverById",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Returns the driver for the given driver_id.",
+            "schema": {
+              "$ref": "#/definitions/CurrentDriver"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Fleet", "Drivers"],
+        "summary": "/fleet/drivers/{driver_id or external_id}",
+        "description": "Update a driver by id or by external id",
+        "operationId": "updateDriverById",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "$ref": "#/parameters/updateDriverParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the updated driver.",
+            "schema": {
+              "$ref": "#/definitions/CurrentDriver"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Fleet", "Drivers"],
+        "summary": "/fleet/drivers/{driver_id or external_id}",
+        "description": "Deactivate a driver with the given id.",
+        "operationId": "deactivateDriver",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description":
+              "Successfully deactivated the driver, which is now referenced by /fleet/drivers/inactive/{driver_id}."
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AuxInputPike": {
+      "type": "object",
+      "description": "Digital value of an aux input.",
+      "required": ["timeMs", "value"],
+      "properties": {
+        "timeMs": {
+          "type": "number",
+          "description": "Timestamp in Unix epoch milliseconds.",
+          "format": "int64",
+          "example": 1546542978484
+        },
+        "location": {
+          "description": "Locations",
+          "type": "object",
+          "properties": {
+            "latitude": {
+              "type": "number",
+              "format": "double",
+              "example": 123.123
+            },
+            "longitude": {
+              "type": "number",
+              "format": "double",
+              "example": 123.123
+            },
+            "timeMs": {
+              "type": "number",
+              "format": "int64",
+              "example": 123123123123
+            }
+          }
+        },
+        "value": {
+          "type": "boolean",
+          "description": "Boolean representing the digital value of the aux input.",
+          "example": true
+        }
+      }
+    },
+    "AuxInputSeriesPike": {
+      "type": "object",
+      "description": "A list of aux input values over a timerange.",
+      "required": ["name", "values"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the aux input.",
+          "example": "Boom",
+          "enum": [
+            "Emergency Lights",
+            "Emergency Alarm",
+            "Stop Paddle",
+            "Power Take-Off",
+            "Plow",
+            "Sweeper",
+            "Salter",
+            "Boom"
+          ]
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AuxInputPike"
+          }
+        }
+      }
+    },
+    "DriverBase": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Driver's name.",
+          "example": "Susan Jones"
+        },
+        "username": {
+          "type": "string",
+          "description": "Driver's login username into the driver app.",
+          "example": "Susan Jones"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Driver's phone number. Please include only digits, ex. 4157771234",
+          "example": "5558234327"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Notes about the driver.",
+          "example": "Also goes by the nickname 'Furious Fred'."
+        },
+        "licenseNumber": {
+          "type": "string",
+          "description": "Driver's state issued license number.",
+          "example": "E1234567"
+        },
+        "licenseState": {
+          "type": "string",
+          "description": "Abbreviation of state that issued driver's license.",
+          "example": "CA"
+        },
+        "eldExempt": {
+          "type": "boolean",
+          "description": "Flag indicating this driver is exempt from the Electronic Logging Mandate."
+        },
+        "eldExemptReason": {
+          "type": "string",
+          "description": "Reason that this driver is exempt from the Electronic Logging Mandate (see eldExempt)."
+        },
+        "eldBigDayExemptionEnabled": {
+          "type": "boolean",
+          "description": "Flag indicating this driver may use Big Day excemptions in ELD logs."
+        },
+        "eldAdverseWeatherExemptionEnabled": {
+          "type": "boolean",
+          "description": "Flag indicating this driver may use Adverse Weather exemptions in ELD logs."
+        },
+        "eldPcEnabled": {
+          "type": "boolean",
+          "description": "Flag indicating this driver may select the Personal Conveyance duty status in ELD logs.",
+          "default": false
+        },
+        "eldYmEnabled": {
+          "type": "boolean",
+          "description": "Flag indicating this driver may select the Yard Move duty status in ELD logs.",
+          "default": false
+        },
+        "eldDayStartHour": {
+          "type": "integer",
+          "description":
+            "0 indicating midnight-to-midnight ELD driving hours, 12 to indicate noon-to-noon driving hours."
+        },
+        "vehicleId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "ID of the vehicle assigned to the driver for static vehicle assignments. (uncommon).",
+          "example": 444
+        },
+        "groupId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Deprecated.",
+          "example": 101
+        },
+        "vehicleGroupTagId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "ID of the tag which determines which trailers a driver will see when selecting trailers",
+          "example": 171
+        },
+        "trailerGroupTagId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "ID of the tag which determines which trailers a driver will see when selecting trailers",
+          "example": 194
+        },
+        "externalIds": {
+          "$ref": "#/definitions/ExternalIDs"
+        }
+      }
+    },
+    "DriverForCreate": {
+      "allOf": [
+        {
+          "type": "object",
+          "required": ["password"],
+          "properties": {
+            "password": {
+              "type": "string",
+              "description": "Driver's password for the driver app.",
+              "example": "mypassword"
+            },
+            "tagIds": {
+              "$ref": "#/definitions/TagIds"
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/DriverBase"
+        }
+      ]
+    },
+    "DriverForUpdate": {
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "tagIds": {
+              "$ref": "#/definitions/TagIds"
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/DriverBase"
+        }
+      ]
+    },
+    "Driver": {
+      "allOf": [
+        {
+          "type": "object",
+          "required": ["id"],
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the driver.",
+              "example": 556
+            },
+            "isDeactivated": {
+              "type": "boolean",
+              "description": "True if the driver account has been deactivated."
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TagMetadata"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "currentVehicleId": {
+              "type": "integer",
+              "format": "int64",
+              "description":
+                "ID of the vehicle that this driver is currently assigned to. Omitted if there is no current vehicle assignment for this driver.",
+              "example": 879
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/DriverBase"
+        }
+      ]
+    },
+    "CurrentDriver": {
+      "$ref": "#/definitions/Driver"
+    },
+    "TagMetadata": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "The ID of this tag.",
+          "example": 12345
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of this tag.",
+          "example": "Broken Vehicles"
+        }
+      }
+    },
+    "TagIds": {
+      "type": "array",
+      "description": "A list of tag IDs.",
+      "items": {
+        "type": "number",
+        "format": "int64",
+        "example": 123
+      }
+    },
+    "EngineStatePike": {
+      "description": "The state of the vehicle over time. State can be Running, Off, or Idle.",
+      "type": "object",
+      "required": ["timeMs", "value"],
+      "properties": {
+        "timeMs": {
+          "description": "Timestamp in Unix epoch milliseconds.",
+          "type": "number",
+          "format": "int64",
+          "example": 1546542978484
+        },
+        "location": {
+          "description": "Locations",
+          "type": "object",
+          "properties": {
+            "latitude": {
+              "type": "number",
+              "format": "double",
+              "example": 123.123
+            },
+            "longitude": {
+              "type": "number",
+              "format": "double",
+              "example": 123.123
+            },
+            "timeMs": {
+              "type": "number",
+              "format": "int64",
+              "example": 123123123123
+            }
+          }
+        },
+        "value": {
+          "type": "string",
+          "enum": ["Running", "Off", "Idle"]
+        }
+      }
+    },
+    "UnassignedDrivingSegment": {
+      "type": "object",
+      "description": "An unassigned driving segment.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "string",
+          "example": "08b3aeada5f4ab3010c0b4efa28d2d1890dbf8d48d2d"
+        },
+        "vehicleId": {
+          "type": "integer",
+          "format": "int64",
+          "example": 212014918086169
+        },
+        "startMs": {
+          "type": "integer",
+          "format": "int64",
+          "example": 1523059200000
+        },
+        "endMs": {
+          "type": "integer",
+          "format": "int64",
+          "example": 1523059200000
+        },
+        "annotation": {
+          "type": "string",
+          "description": "Annotation for the driving segment.",
+          "example": "Drive time"
+        },
+        "pendingDriverId": {
+          "type": "integer",
+          "format": "int64",
+          "example": 719
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of assignment for this segment.",
+          "enum": ["PENDING", "ACCEPTED", "REJECTED", "UNASSIGNED", "UNKNOWN"],
+          "example": "PENDING"
+        },
+        "createdAtMs": {
+          "type": "integer",
+          "format": "int64",
+          "example": 1523059200000
+        }
+      }
+    },
+    "UnassignedDrivingSegmentListResponse": {
+      "type": "object",
+      "description": "A driving segment that has no associated driver.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "string",
+          "example": "08b3aeada5f4ab3010c0b4efa28d2d1890dbf8d48d2d"
+        },
+        "vehicleId": {
+          "type": "integer",
+          "format": "int64",
+          "example": 212014918086169
+        },
+        "startMs": {
+          "type": "integer",
+          "format": "int64",
+          "example": 1523059200000
+        },
+        "endMs": {
+          "type": "integer",
+          "format": "int64",
+          "example": 1523059200000
+        },
+        "annotation": {
+          "type": "string",
+          "description": "Annotation for the driving segment.",
+          "example": "Drive time"
+        },
+        "createdAtMs": {
+          "type": "integer",
+          "format": "int64",
+          "example": 1523059200000
+        }
+      }
+    },
+    "HosLogsResponse": {
+      "type": "object",
+      "properties": {
+        "logs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "groupId": {
+                "type": "integer",
+                "format": "int64",
+                "description": "Deprecated.",
+                "example": 101
+              },
+              "vehicleId": {
+                "type": "integer",
+                "format": "int64",
+                "description": "ID of the vehicle.",
+                "example": 112
+              },
+              "driverId": {
+                "type": "integer",
+                "format": "int64",
+                "description": "ID of the driver.",
+                "example": 444
+              },
+              "logStartMs": {
+                "type": "integer",
+                "format": "int64",
+                "description": "The time at which the log/HOS status started in UNIX milliseconds.",
+                "example": 1462881998034
+              },
+              "hosStatusType": {
+                "type": "string",
+                "description":
+                  "The Hours of Service status type. One of `OFF_DUTY`, `SLEEPER_BED`, `DRIVING`, `ON_DUTY`, `YARD_MOVE`, `PERSONAL_CONVEYANCE`.",
+                "example": "OFF_DUTY"
+              },
+              "locCity": {
+                "type": "string",
+                "description": "City in which the log was recorded.",
+                "example": "Ahwatukee"
+              },
+              "locState": {
+                "type": "string",
+                "description": "State in which the log was recorded.",
+                "example": "Arizona"
+              },
+              "locLat": {
+                "type": "number",
+                "format": "float",
+                "description": "Latitude at which the log was recorded.",
+                "example": 23.413702345
+              },
+              "locLng": {
+                "type": "number",
+                "format": "float",
+                "description": "Longitude at which the log was recorded.",
+                "example": -98.502888123
+              },
+              "locName": {
+                "type": "string",
+                "description": "Name of location at which the log was recorded.",
+                "example": "McLean Site A"
+              },
+              "remark": {
+                "type": "string",
+                "description": "Remark associated with the log entry.",
+                "example": "Lunch Break"
+              },
+              "codriverIds": {
+                "type": "array",
+                "items": {
+                  "type": "number",
+                  "description": "Ids of codrivers during any of the logged trips",
+                  "example": 445
+                }
+              },
+              "odometerMeters": {
+                "description": "The number of meters reported by the odometer.",
+                "type": "integer",
+                "format": "int64",
+                "example": 120000
+              },
+              "eldLocation": {
+                "description": "The distance (in miles) and direction from the closest city and state",
+                "type": "string",
+                "example": "0.9 mi SSE San Francisco, CA"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ExternalIDs": {
+      "type": "object",
+      "description":
+        "User-defined dictionary of external IDs (key-value pairs). Both the keys and the values of the dictionary are of type string and must be alphanumeric. Each organization can have at most 10 unique external ID keys. To delete an external ID, set its value to null or the empty string (`\"\"`). An external ID can be used as a path parameter to retrieve or update that resource.",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "maintenanceId": "250020",
+        "payrollId": "ABFS18600"
+      }
+    }
+  },
+  "parameters": {
+    "createUserParam": {
+      "name": "user",
+      "description": "User properties. Only one of organizationRoleId or tagRoles is required.",
+      "required": true,
+      "in": "body",
+      "schema": {
+        "type": "object",
+        "required": ["name", "email", "authType"],
+        "allOf": [
+          {
+            "$ref": "#/definitions/UpsertUserBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "The email address of this user.",
+                "example": "user@company.com"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "updateUserParam": {
+      "name": "user",
+      "description":
+        "User properties. Note that when updating tagRoles, the complete list of tag roles must be supplied for the user. To delete all tag roles set the value to null or an empty array.",
+      "required": true,
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/UpsertUserBase"
+      }
+    },
+    "createDriverParam": {
+      "name": "createDriverParam",
+      "description": "Driver creation body",
+      "required": true,
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/DriverForCreate"
+      }
+    },
+    "updateDriverParam": {
+      "name": "updateDriverParam",
+      "description": "Driver update body",
+      "required": true,
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/DriverForUpdate"
+      }
+    }
+  }
+}
