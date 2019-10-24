@@ -591,6 +591,10 @@
         }
       ]
     },
+    "ErrorResponse": {
+      "description": "Error message describing why the request failed.",
+      "type": "string"
+    },
     "CurrentDriver": {
       "$ref": "#/definitions/Driver"
     },
